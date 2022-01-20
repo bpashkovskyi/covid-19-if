@@ -8,6 +8,7 @@
     using System.Text.RegularExpressions;
 
     using Covid19.Models.Entities;
+    using Covid19.Utilities;
 
     public class TimeSeriesReadService
     {
@@ -86,9 +87,23 @@
                 }
 
                 timeSeriesDictionary.Add(timeSeriesName, timeSeries);
+                this.AdjustRealDaysData(timeSeries);
             }
 
             return timeSeriesDictionary;
+        }
+
+        private void AdjustRealDaysData(TimeSeries timeSeries)
+        {
+            foreach (var day in timeSeries.DaysData)
+            {
+                var previousDay = timeSeries.DaysData.GetPreviousElement(day, 1);
+
+                day.NewCases = previousDay == null ? day.NewCases : day.TotalCases - previousDay.TotalCases;
+
+                var previousWeekDay = timeSeries.DaysData.GetPreviousElement(day, 7);
+                day.WeeklyNewCases = previousWeekDay == null ? 0 : (day.TotalCases - previousWeekDay.TotalCases) / 7;
+            }
         }
     }
 }

@@ -49,10 +49,15 @@ namespace Covid19
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc(
-                routes => routes.MapRoute(
-                    "default",
-                    "{controller=Home}/{action=Index}/{id?}"));
+            app.UseRouting();
+
+            // The equivalent of 'app.UseMvcWithDefaultRoute()'
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+                // Which is the same as the template
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

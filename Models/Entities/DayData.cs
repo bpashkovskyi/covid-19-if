@@ -1,7 +1,6 @@
 ﻿namespace Covid19.Models.Entities
 {
     using System;
-    using System.Collections.Generic;
 
     public class DayData
     {

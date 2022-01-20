@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Covid-19 in IF";
 }
-@model Dictionary<string, Covid19.Models.Entities.PredictionTimeSeries>
+@model Dictionary<string, Covid19.Models.Entities.TimeSeries>
 
 <div class="text-center">
 
@@ -31,27 +31,14 @@
                          } ],
                 datasets: [
                     {
-                        label: 'Predicted Total cases',
-                        borderColor: 'rgba(255, 0, 0, 0.2)',
-                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                        data: [@foreach (var day in timeSeries.DaysData)
-                               {
-                                   @(day.PredictionTotalCases + ", ")
-                               } ],
-                        fill: true,
-                    },
-                    {
                         label: 'Total cases',
                         borderColor: 'rgba(0, 0, 0, 0.2)',
                         backgroundColor: 'rgba(0, 0, 0, 0.2)',
                         data: [@foreach (var day in timeSeries.DaysData)
                                {
-                                   if (day.TotalCases != null)
-                                   {
-                                       @(day.TotalCases.Value + ", ")
-                                   }
+                                    @(day.TotalCases + ", ")
                                } ],
-                        fill: false,
+                        fill: true,
                     },
                 ]
             },
@@ -105,27 +92,14 @@
                          } ],
                 datasets: [
                     {
-                        label: 'Predicted new cases',
-                        borderColor: 'rgba(255, 0, 0, 0.2)',
-                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                        data: [@foreach (var day in timeSeries.DaysData)
-                               {
-                                   @(day.PredictionNewCases + ", ")
-                               } ],
-                        fill: true,
-                    },
-                    {
                         label: 'New cases',
                         borderColor: 'rgba(0, 0, 0, 0.2)',
                         backgroundColor: 'rgba(0, 0, 0, 0.2)',
                         data: [@foreach (var day in timeSeries.DaysData)
                                {
-                                   if (day.NewCases != null)
-                                   {
-                                       @(day.NewCases.Value + ", ")
-                                   }
+                                    @(day.NewCases + ", ")
                                } ],
-                        fill: false,
+                        fill: true,
                     },
                     {
                         label: 'Weekly average new cases',
