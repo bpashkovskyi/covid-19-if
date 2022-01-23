@@ -1,23 +1,60 @@
 ﻿namespace Covid19.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Covid19.Models.Entities;
     using Covid19.Services;
 
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : Controller
     {
-        private readonly TimeSeriesReadService timeSeriesReadService;
+        private readonly ReadService readService;
 
         public HomeController()
         {
-            this.timeSeriesReadService = new TimeSeriesReadService();
+            this.readService = new ReadService();
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string timeSeriesType = "Illnesses")
         {
-            var timeSeriesDictionary = this.timeSeriesReadService.ReadTimeSeries();
+            var cases = this.readService.Read();
+            var casesDates = cases.Select(@case => @case.InDate).Distinct().OrderBy(date => date);
 
-            return this.View("Graph", timeSeriesDictionary);
+            var timeSeries = new TimeSeries();
+            foreach (var caseDate in casesDates)
+            {
+                var dayData = new DayData(caseDate, cases);
+                timeSeries.DaysData.Add(dayData);
+            }
+
+            var weeklyAverageTimeSeries = timeSeries;
+
+            var categories = new List<Category>();
+
+            switch (timeSeriesType)
+            {
+                case "Illnesses":
+                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Illness).ToList();
+                    break;
+                case "Hospitalized":
+                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Hospitalization).ToList();
+                    break;
+                case "IntensiveCare":
+                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.IntensiveCare).ToList();
+                    break;
+                case "Ventilated":
+                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Ventilated).ToList();
+                    break;
+                case "Dead":
+                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Dead).ToList();
+                    break;
+            }
+            
+
+            return this.View("Graph", categories);
         }
     }
 }
