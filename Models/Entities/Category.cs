@@ -20,28 +20,28 @@
             this.Male = this.Total - this.Female;
 
             this.ZeroToFive = cases.Count(@case => @case.Age <= 5);
-            this.SixToEleven = cases.Count(@case => @case.Age >= 6 && @case.Age <=11);
-            this.TwelveToSeventeen = cases.Count(@case => @case.Age >= 12 && @case.Age <= 17);
-            this.EighteenToThirtyThree = cases.Count(@case => @case.Age >= 18 && @case.Age <= 33);
-            this.ThirtyFourToFifty = cases.Count(@case => @case.Age >= 34 && @case.Age <= 50);
-            this.FiftyOneToSeventy = cases.Count(@case => @case.Age >= 51 && @case.Age <= 70);
+            this.SixToEleven = cases.Count(@case => @case.Age is >= 6 and <= 11);
+            this.TwelveToSeventeen = cases.Count(@case => @case.Age is >= 12 and <= 17);
+            this.EighteenToThirtyThree = cases.Count(@case => @case.Age is >= 18 and <= 33);
+            this.ThirtyFourToFifty = cases.Count(@case => @case.Age is >= 34 and <= 50);
+            this.FiftyOneToSeventy = cases.Count(@case => @case.Age is >= 51 and <= 70);
             this.MoreThanSeventyOne = cases.Count(@case => @case.Age >= 71);
         }
 
-        public DateTime Date { get; set; }
+        public DateTime Date { get; private init; }
 
-        public long Total { get; private set; }
+        public long Total { get; private init; }
 
-        public long Female { get; private set; }
-        public long Male { get; private set; }
+        public long Female { get; private init; }
+        public long Male { get; private init; }
 
-        public long ZeroToFive { get; private set; }
-        public long SixToEleven { get; private set; }
-        public long TwelveToSeventeen { get; private set; }
-        public long EighteenToThirtyThree { get; private set; }
-        public long ThirtyFourToFifty { get; private set; }
-        public long FiftyOneToSeventy { get; private set; }
-        public long MoreThanSeventyOne { get; private set; }
+        public long ZeroToFive { get; private init; }
+        public long SixToEleven { get; private init; }
+        public long TwelveToSeventeen { get; private init; }
+        public long EighteenToThirtyThree { get; private init; }
+        public long ThirtyFourToFifty { get; private init; }
+        public long FiftyOneToSeventy { get; private init; }
+        public long MoreThanSeventyOne { get; private init; }
 
         public Category GetAverageData(List<Category> categories)
         {

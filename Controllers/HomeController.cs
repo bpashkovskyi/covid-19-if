@@ -1,6 +1,5 @@
 ﻿namespace Covid19.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -11,11 +10,11 @@
 
     public class HomeController : Controller
     {
-        private readonly ReadService readService;
+        private readonly IReadService readService;
 
-        public HomeController()
+        public HomeController(IReadService readService)
         {
-            this.readService = new ReadService();
+            this.readService = readService;
         }
 
         public IActionResult Index(string timeSeriesType = "Illnesses")
@@ -30,7 +29,7 @@
                 timeSeries.DaysData.Add(dayData);
             }
 
-            var weeklyAverageTimeSeries = timeSeries;
+            var weeklyAverageTimeSeries = timeSeries.GetWeeklyAverageData();
 
             var categories = new List<Category>();
 

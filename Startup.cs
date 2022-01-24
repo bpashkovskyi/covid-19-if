@@ -7,6 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Covid19
 {
+    using Covid19.Services;
+
+    using Microsoft.Extensions.Caching.Memory;
+    using Microsoft.Extensions.Hosting;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -27,11 +32,14 @@ namespace Covid19
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddScoped<IReadService, ReadService>();
+            services.AddSingleton<IMemoryCache, MemoryCache>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

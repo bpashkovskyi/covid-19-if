@@ -3,39 +3,54 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Text.RegularExpressions;
 
     using Covid19.Models.Entities;
-    using Covid19.Utilities;
 
-    public class ReadService
+    using Microsoft.Extensions.Caching.Memory;
+
+    public class ReadService : IReadService
     {
         private const string CsvUrl = "https://raw.githubusercontent.com/bpashkovskyi/covid-19-if/main/data2.csv";
 
+        private readonly IMemoryCache memoryCache;
+
+        public ReadService(IMemoryCache memoryCache)
+        {
+            this.memoryCache = memoryCache;
+        }
+
         public List<Case> Read()
         {
-            var streamReader = this.GetStreamReaderForRemoteUrl(CsvUrl);
+            if (!this.memoryCache.TryGetValue("Cases", out List<Case> cases))
+            {
+                var streamReader = this.GetStreamReaderForRemoteUrl(CsvUrl);
+                var dataTable = this.ConvertCsvToDataTable(streamReader);
 
-            var dataTable = this.ConvertCsvToDataTable(streamReader);
-            var cases = this.Read(dataTable);
+                cases = this.Read(dataTable);
 
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromDays(1));
+
+                this.memoryCache.Set("Cases", cases, cacheEntryOptions);
+            }
+            
             return cases;
         }
 
         private StreamReader GetStreamReaderForRemoteUrl(string url)
         {
-            var webRequest = WebRequest.Create(url);
+            ////var webRequest = WebRequest.Create(url);
 
             ////var webResponse = webRequest.GetResponse();
             ////var responseStream = webResponse.GetResponseStream();
             ////var streamReader = new StreamReader(responseStream);
-
-            var filePath = Path.GetFullPath("wwwroot\\data.csv");
-            var streamReader = new StreamReader(filePath);
-
+            
+            string filePath = Path.GetFullPath("Data.csv");
+            StreamReader streamReader = new StreamReader(filePath);
+            
             return streamReader;
         }
 
@@ -79,7 +94,7 @@
                     City = dataTable.Rows[rowIndex]["Людський випадок Поточне місце проживання - Населений пункт"].ToString(),
                     Gender = dataTable.Rows[rowIndex]["Людський випадок - Стать"].ToString(),
                     Age = int.Parse(dataTable.Rows[rowIndex]["Людський випадок - Вік пацієнта"].ToString()),
-                    Illnesses = dataTable.Rows[rowIndex]["Наявність супутніх станів"].ToString() == "Так",
+                    OtherIllnesses = dataTable.Rows[rowIndex]["Наявність супутніх станів"].ToString() == "Так",
                     Hospitalized = dataTable.Rows[rowIndex]["Людський випадок - Госпіталізація"].ToString() == "Так",
                     IntensiveCare = dataTable.Rows[rowIndex]["Перебування у відділенні інтенсивної терапії"].ToString() == "Так",
                     Ventilated = dataTable.Rows[rowIndex]["Штучна вентиляція легень"].ToString() == "Так",

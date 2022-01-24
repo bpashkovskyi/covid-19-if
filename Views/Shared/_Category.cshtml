@@ -1,0 +1,236 @@
+﻿@model List<Covid19.Models.Entities.Category>
+@{ var index = ViewData["index"];}
+<canvas id="byGender-@index" width="400" height="400"></canvas>
+<canvas id="byAge-@index" width="400" height="400"></canvas>
+
+<script>
+        const byGender_context_@index = document.getElementById('byGender-@index');
+        const byGenderChart_@index = new Chart(byGender_context_@index,
+            {
+                type: 'line',
+                data: {
+                    labels: [@foreach (var day in Model)
+                             {
+                                 <text>'</text>
+                                 @(day.Date.ToLongDateString())<text>',</text>
+                             } ],
+                    datasets: [
+                        {
+                            label: 'Кількість випадків',
+                            borderColor: 'rgba(0, 0, 0, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.Total + ", ")
+                                   } ],
+                            fill: false
+                        },
+                        {
+                            label: 'Жінки',
+                            borderColor: 'rgba(255, 0, 0, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.Female + ", ")
+                                   } ],
+                            fill: false,
+                        },
+                        {
+                            label: 'Чоловіки',
+                            borderColor: 'rgba(0, 0, 255, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.Male + ", ")
+                                   } ],
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Стать'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Дата'
+                                }
+                            }
+                        ],
+                        yAxes: [
+                            {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Випадки'
+                                },
+                                ticks:
+                                {
+                                    min: 0
+                                },
+                            }
+                        ]
+                    },
+                    plugins: {
+                        zoom: {
+                            zoom: {
+                                wheel: {
+                                    enabled: true
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                drag: {
+                                    enabled: true
+                                },
+                                mode: 'x',
+                            }
+                        }
+                    }
+                }
+            });
+
+        const byAge_context_@index = document.getElementById('byAge-@index');
+    const byAgeChart_@index = new Chart(byAge_context_@index,
+        {
+            type: 'line',
+                data: {
+                    labels: [@foreach (var day in Model)
+                             {
+                                 <text>'</text>
+                                 @(day.Date.ToString("MMMM dd"))<text>',</text>
+                             } ],
+                    datasets: [
+                        {
+                            label: '0 до 5',
+                            borderColor: 'rgba(255, 0, 0, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.ZeroToFive + ", ")
+                                   } ],
+                            fill: true,
+                        },
+                        {
+                            label: '6 до 11',
+                            borderColor: 'rgba(255, 128, 255, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.SixToEleven + ", ")
+                                   } ],
+                            fill: false
+                        },
+                        {
+                            label: '12 до 17',
+                            borderColor: 'rgba(255, 0, 127, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.TwelveToSeventeen + ", ")
+                                   } ],
+                            fill: false
+                        },
+                        {
+                            label: '18 до 33',
+                            borderColor: 'rgba(0, 255, 0, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.EighteenToThirtyThree + ", ")
+                                   } ],
+                            fill: false
+                        },
+                        {
+                            label: '34 до 50',
+                            borderColor: 'rgba(0, 255, 255, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.ThirtyFourToFifty + ", ")
+                                   } ],
+                            fill: false
+                        },
+                        {
+                            label: '51 до 70',
+                            borderColor: 'rgba(0, 0, 255, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.FiftyOneToSeventy + ", ")
+                                   } ],
+                            fill: false
+                        },
+                        {
+                            label: 'від 71',
+                            borderColor: 'rgba(0, 51, 51, 0.5)',
+                            data: [@foreach (var day in Model)
+                                   {
+                                       @(day.MoreThanSeventyOne + ", ")
+                                   } ],
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Вік'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'День'
+                                }
+                            }
+                        ],
+                        yAxes: [
+                            {
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Випадки'
+                                },
+                                ticks:
+                                {
+                                    min: 0
+                                },
+                            }
+                        ]
+                    },
+                    plugins: {
+                        zoom: {
+                            zoom: {
+                                wheel: {
+                                    enabled: true
+                                },
+                                pinch: {
+                                    enabled: true
+                                },
+                                drag: {
+                                    enabled: true
+                                },
+                                mode: 'x'
+                            }
+                        }
+                    }
+                }
+            });
+</script>

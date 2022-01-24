@@ -23,17 +23,17 @@
             this.Dead = new Category(date, dayCases.Where(@case => @case.Dead).ToList());
         }
 
-        public DateTime Date { get; private set; }
+        public DateTime Date { get; private init; }
 
-        public Category Illness { get; private set; }
+        public Category Illness { get; private init; }
 
-        public Category Hospitalization { get; private set; }
+        public Category Hospitalization { get; private init; }
 
-        public Category IntensiveCare { get; private set; }
+        public Category IntensiveCare { get; private init; }
 
-        public Category Ventilated { get; private set; }
+        public Category Ventilated { get; private init; }
 
-        public Category Dead { get; private set; }
+        public Category Dead { get; private init; }
 
         public DayData GetAverageData(List<DayData> lastWeek)
         {
