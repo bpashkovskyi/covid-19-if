@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Covid19.Models.Entities;
     using Covid19.Services;
@@ -17,17 +18,12 @@
             this.readService = readService;
         }
 
-        public IActionResult Index(string timeSeriesType = "Illnesses")
+        public async Task<IActionResult> Index(string timeSeriesType = "Illnesses")
         {
-            var cases = this.readService.Read();
-            var casesDates = cases.Select(@case => @case.InDate).Distinct().OrderBy(date => date);
+            var cases = await this.readService.ReadAsync().ConfigureAwait(false);
 
-            var timeSeries = new TimeSeries();
-            foreach (var caseDate in casesDates)
-            {
-                var dayData = new DayData(caseDate, cases);
-                timeSeries.DaysData.Add(dayData);
-            }
+            var timeSeries = new TimeSeries(cases);
+
 
             var weeklyAverageTimeSeries = timeSeries.GetWeeklyAverageData();
 

@@ -1,7 +1,7 @@
 ﻿@model List<Covid19.Models.Entities.Category>
 @{ var index = ViewData["index"];}
-<canvas id="byGender-@index" width="400" height="400"></canvas>
-<canvas id="byAge-@index" width="400" height="400"></canvas>
+<canvas id="byGender-@index" style="width: 90%; height: 800px;"></canvas>
+<canvas id="byAge-@index" style="width: 90%; height: 800px;"></canvas>
 
 <script>
         const byGender_context_@index = document.getElementById('byGender-@index');

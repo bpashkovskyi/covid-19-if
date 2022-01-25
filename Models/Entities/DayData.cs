@@ -10,11 +10,13 @@
         {
         }
 
-        public DayData(DateTime date, List<Case> cases)
+        public DayData(DateTime date, List<Case> cases, bool cumulative = false)
         {
             Date = date;
 
-            var dayCases = cases.Where(@case => @case.InDate < this.Date).ToList();
+            var dayCases = cumulative 
+                ? cases.Where(@case => @case.InDate < this.Date).ToList()
+                : cases.Where(@case => @case.InDate == this.Date).ToList();
 
             this.Illness = new Category(date, dayCases);
             this.Hospitalization = new Category(date, dayCases.Where(@case => @case.Hospitalized).ToList());

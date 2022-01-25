@@ -7,6 +7,21 @@
 
     public class TimeSeries
     {
+        private TimeSeries()
+        {
+        }
+
+        public TimeSeries(List<Case> cases)
+        {
+            var casesDates = cases.Select(@case => @case.InDate).Distinct().OrderBy(date => date);
+
+            foreach (var caseDate in casesDates)
+            {
+                var dayData = new DayData(caseDate, cases);
+                this.DaysData.Add(dayData);
+            }
+        }
+
         public List<DayData> DaysData { get; } = new List<DayData>();
 
         public TimeSeries GetWeeklyAverageData()
