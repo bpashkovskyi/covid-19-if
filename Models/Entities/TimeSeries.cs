@@ -11,13 +11,13 @@
         {
         }
 
-        public TimeSeries(List<Case> cases)
+        public TimeSeries(List<Case> cases, bool cumulative = false)
         {
             var casesDates = cases.Select(@case => @case.InDate).Distinct().OrderBy(date => date);
 
             foreach (var caseDate in casesDates)
             {
-                var dayData = new DayData(caseDate, cases);
+                var dayData = new DayData(caseDate, cases, cumulative);
                 this.DaysData.Add(dayData);
             }
         }

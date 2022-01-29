@@ -2,9 +2,12 @@
     ViewData["Title"] = "Covid-19";
 }
 
-@model List<Covid19.Models.Entities.Category>
+@model Covid19.ViewModels.ChartsViewModel
 
-@{
-    ViewData["index"] = 1;
-    @(await Html.PartialAsync("_Category", Model, ViewData))
+<partial name="_Header" for="@Model.Settings" />
+
+
+@foreach (var chart in Model.Charts)
+{
+    @(await Html.PartialAsync("_Chart", chart))
 }

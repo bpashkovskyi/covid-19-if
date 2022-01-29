@@ -6,6 +6,7 @@
 
     using Covid19.Models.Entities;
     using Covid19.Services;
+    using Covid19.ViewModels;
 
     using Microsoft.AspNetCore.Mvc;
 
@@ -18,38 +19,62 @@
             this.readService = readService;
         }
 
-        public async Task<IActionResult> Index(string timeSeriesType = "Illnesses")
+        public async Task<IActionResult> Index(string clinicalStatus = "Illness", string graphType = "Daily")
         {
             var cases = await this.readService.ReadAsync().ConfigureAwait(false);
 
-            var timeSeries = new TimeSeries(cases);
+            TimeSeries timeSeries = null;
 
-
-            var weeklyAverageTimeSeries = timeSeries.GetWeeklyAverageData();
-
-            var categories = new List<Category>();
-
-            switch (timeSeriesType)
+            switch (graphType)
             {
-                case "Illnesses":
-                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Illness).ToList();
+                case "Daily": timeSeries = new TimeSeries(cases, cumulative: false);
                     break;
-                case "Hospitalized":
-                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Hospitalization).ToList();
+                case "Weekly":
+                    timeSeries = new TimeSeries(cases, cumulative: false).GetWeeklyAverageData();
                     break;
-                case "IntensiveCare":
-                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.IntensiveCare).ToList();
-                    break;
-                case "Ventilated":
-                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Ventilated).ToList();
-                    break;
-                case "Dead":
-                    categories = weeklyAverageTimeSeries.DaysData.Select(dayData => dayData.Dead).ToList();
+                case "Cumulative":
+                    timeSeries = new TimeSeries(cases, cumulative: true);
                     break;
             }
-            
 
-            return this.View("Graph", categories);
+            var clinicalStatuses = timeSeries.DaysData.Select(dayData => dayData.GetClinicalStatus(clinicalStatus)).ToList();
+
+            var chartsViewModel = new ChartsViewModel
+            {
+                Charts = this.MapClinicalStatuses(clinicalStatuses),
+                Settings = new ViewSettings { ClinicalStatus = clinicalStatus, GraphType = graphType }
+            };
+
+            return this.View("Graph", chartsViewModel);
+        }
+
+        private List<Chart> MapClinicalStatuses(List<ClinicalStatus> clinicalStatuses)
+        {
+            var charts = clinicalStatuses.First().SocialGroups.Select(socialGroup => new Chart(socialGroup.Name)
+            {
+                Title = socialGroup.Name,
+                XData = clinicalStatuses.Select(clinicalStatus => clinicalStatus.Date.ToLongDateString()).ToArray(),
+                Graphs = this.MapSocialGroups(clinicalStatuses.Select(clinicalStatus => clinicalStatus.GetSocialGroup(socialGroup.Name)).ToList())
+            }).ToList();
+
+            return charts;
+        }
+
+        private List<Graph> MapSocialGroups(List<SocialGroup> socialGroups)
+        {
+            var graphs = socialGroups.First().Values.Select(
+                socialGroupValue => new Graph
+                {
+                    Label = socialGroupValue.Name,
+                    YData = socialGroups.Select(socialGroup => socialGroup.GetSocialGroupValue(socialGroupValue.Name).CasesCount.ToString()).ToArray()
+                }).ToList();
+
+            foreach (var graph in graphs)
+            {
+                graph.BorderColor = Graph.Colors[graphs.IndexOf(graph)];
+            }
+
+            return graphs;
         }
     }
 }

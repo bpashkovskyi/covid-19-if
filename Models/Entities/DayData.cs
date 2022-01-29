@@ -6,50 +6,46 @@
 
     public class DayData
     {
-        public DayData()
+        private DayData()
         {
         }
 
         public DayData(DateTime date, List<Case> cases, bool cumulative = false)
         {
-            Date = date;
+            this.Date = date;
 
             var dayCases = cumulative 
                 ? cases.Where(@case => @case.InDate < this.Date).ToList()
                 : cases.Where(@case => @case.InDate == this.Date).ToList();
 
-            this.Illness = new Category(date, dayCases);
-            this.Hospitalization = new Category(date, dayCases.Where(@case => @case.Hospitalized).ToList());
-            this.IntensiveCare = new Category(date, dayCases.Where(@case => @case.IntensiveCare).ToList());
-            this.Ventilated = new Category(date, dayCases.Where(@case => @case.Ventilated).ToList());
-            this.Dead = new Category(date, dayCases.Where(@case => @case.Dead).ToList());
+            this.ClinicalStatuses = new List<ClinicalStatus>
+            {
+                new ClinicalStatus("Illness", date, dayCases),
+                new ClinicalStatus("Hospitalization", date, dayCases.Where(@case => @case.Hospitalized).ToList()),
+                new ClinicalStatus("IntensiveCare", date, dayCases.Where(@case => @case.IntensiveCare).ToList()),
+                new ClinicalStatus("Ventilated", date, dayCases.Where(@case => @case.Ventilated).ToList()),
+                new ClinicalStatus("Dead", date, dayCases.Where(@case => @case.Dead).ToList()),
+            };
         }
 
-        public DateTime Date { get; private init; }
+        private DateTime Date { get; init; }
 
-        public Category Illness { get; private init; }
+        private List<ClinicalStatus> ClinicalStatuses { get; init; }
 
-        public Category Hospitalization { get; private init; }
-
-        public Category IntensiveCare { get; private init; }
-
-        public Category Ventilated { get; private init; }
-
-        public Category Dead { get; private init; }
-
-        public DayData GetAverageData(List<DayData> lastWeek)
+        public DayData GetAverageData(List<DayData> previousDays)
         {
             var averageDay = new DayData
             {
                 Date = this.Date,
-                Illness = this.Illness.GetAverageData(lastWeek.Select(day => day.Illness).ToList()),
-                Hospitalization = this.Hospitalization.GetAverageData(lastWeek.Select(day => day.Hospitalization).ToList()),
-                IntensiveCare = this.IntensiveCare.GetAverageData(lastWeek.Select(day => day.IntensiveCare).ToList()),
-                Ventilated = this.Ventilated.GetAverageData(lastWeek.Select(day => day.Ventilated).ToList()),
-                Dead = this.Dead.GetAverageData(lastWeek.Select(day => day.Dead).ToList()),
+                ClinicalStatuses = this.ClinicalStatuses.Select(clinicalStatus => clinicalStatus.GetAverageData(previousDays.Select(previousDay => previousDay.GetClinicalStatus(clinicalStatus.Name)).ToList())).ToList()
             };
 
             return averageDay;
+        }
+
+        public ClinicalStatus GetClinicalStatus(string name)
+        {
+            return this.ClinicalStatuses.SingleOrDefault(clinicalStatus => clinicalStatus.Name == name);
         }
     }
 }
