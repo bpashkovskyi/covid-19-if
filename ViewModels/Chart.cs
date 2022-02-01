@@ -16,6 +16,6 @@
 
         public string[] XData { get; init; }
 
-        public List<Graph> Graphs { get; init; }
+        public List<ChartLine> Lines { get; init; }
     }
 }

@@ -14,7 +14,7 @@
 
     public class ReadService : IReadService
     {
-        private const string CsvUrl = "https://raw.githubusercontent.com/bpashkovskyi/covid-19-if/main/data2.csv";
+        private const string CsvUrl = "https://raw.githubusercontent.com/bpashkovskyi/covid-19-if/version2/data2.csv";
         private const string CacheKey = "Cases";
         private readonly MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1));
 

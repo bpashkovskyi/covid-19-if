@@ -1,4 +1,4 @@
-﻿@model Covid19.ViewModels.ViewSettings
+﻿@model Covid19.ViewModels.PageSettings
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
@@ -8,42 +8,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-            <div class="header-form">
-                <form method="get">
-                    <table class="header-form">
-                        <tr>
-                            <th>
-                                <label>Тип графіку:</label>
-                            </th>
-                            <th>
-                                <label>Тип показника:</label>
-                            </th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <select asp-for="GraphType" name="graphType">
-                                    <option value="Daily">Щоденні</option>
-                                    <option value="Weekly">Тижневі</option>
-                                    <option value="Cumulative">Кумулятивні</option>
-                                </select>
-                            </th>
-                            <th>
-                                <select asp-for="ClinicalStatus" name="clinicalStatus">
-                                    <option value="Illness">Нові випадки</option>
-                                    <option value="Hospitalization">Госпіталізація</option>
-                                    <option value="IntensiveCare">Реанімація</option>
-                                    <option value="Ventilated">ШВЛ</option>
-                                    <option value="Dead">Смерті</option>
-                                </select>
-                            </th>
-                            <th>
-                                <input type="submit" value="Відобразити"/>
-                            </th>
-                        </tr>
-                    </table>
-                </form>
-            </div>
         </div>
     </div>
 </nav>

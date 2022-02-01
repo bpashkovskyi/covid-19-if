@@ -3,51 +3,50 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Covid19.Models.Enums;
     using Covid19.Utilities;
 
     public class TimeSeries
     {
-        private TimeSeries()
-        {
-        }
+        public string Name { get; }
 
-        public TimeSeries(List<Case> cases, bool cumulative = false)
+        public TimeSeries(string name, List<Case> cases, TimeSeriesSettings timeSeriesSettings)
         {
+            this.Name = name;
+
             var casesDates = cases.Select(@case => @case.InDate).Distinct().OrderBy(date => date);
+            var daysData = casesDates.Select(caseDate => new DayData(caseDate, cases, timeSeriesSettings)).ToList();
 
-            foreach (var caseDate in casesDates)
-            {
-                var dayData = new DayData(caseDate, cases, cumulative);
-                this.DaysData.Add(dayData);
-            }
+            this.DaysData = timeSeriesSettings.AggregationType == AggregationType.Weekly 
+                ? this.GetWeeklyAverageData(daysData) 
+                : daysData;
         }
 
-        public List<DayData> DaysData { get; } = new List<DayData>();
+        public List<DayData> DaysData { get; }
 
-        public TimeSeries GetWeeklyAverageData()
+        private List<DayData> GetWeeklyAverageData(List<DayData> daysData)
         {
-            var timeSeries = new TimeSeries();
-            foreach (var day in this.DaysData)
+            var averageDaysData = new List<DayData>();
+            foreach (var day in daysData)
             {
                 var lastWeek = new List<DayData>
                 {
-                    this.DaysData.GetPreviousElement(day, 7),
-                    this.DaysData.GetPreviousElement(day, 6),
-                    this.DaysData.GetPreviousElement(day, 5),
-                    this.DaysData.GetPreviousElement(day, 4),
-                    this.DaysData.GetPreviousElement(day, 3),
-                    this.DaysData.GetPreviousElement(day, 2),
-                    this.DaysData.GetPreviousElement(day, 1)
+                    daysData.GetPreviousElement(day, 7),
+                    daysData.GetPreviousElement(day, 6),
+                    daysData.GetPreviousElement(day, 5),
+                    daysData.GetPreviousElement(day, 4),
+                    daysData.GetPreviousElement(day, 3),
+                    daysData.GetPreviousElement(day, 2),
+                    daysData.GetPreviousElement(day, 1)
                 };
 
                 lastWeek = lastWeek.Where(currentDay => currentDay != null).ToList();
 
                 var averageDay = day.GetAverageData(lastWeek);
-
-                timeSeries.DaysData.Add(averageDay);
+                averageDaysData.Add(averageDay);
             }
 
-            return timeSeries;
+            return averageDaysData;
         }
     }
 }

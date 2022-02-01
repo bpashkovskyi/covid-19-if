@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Covid-19";
+}
+
+@using Covid19.Models.Entities
+@using Covid19.Models.Enums
+@model Covid19.ViewModels.PageSettings
+
+<partial name="_Header" />
+
+<div class="header-form">
+    <form method="get">
+        <table class="header-form">
+            <tr>
+                <th>
+                    <label>Тип графіку:</label>
+                </th>
+                <th>
+                    <label>Тип показника:</label>
+                </th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>
+                    <select asp-for="AggregationType" name="aggregationType">
+                        <option value="Daily">Щоденні</option>
+                        <option value="Weekly">Тижневі</option>
+                        <option value="Cumulative">Кумулятивні</option>
+                    </select>
+                </th>
+                <th>
+                    <select asp-for="ClinicalStatusType" name="clinicalStatusTpe">
+                        <option value="Illness">Нові випадки</option>
+                        <option value="Hospitalization">Госпіталізація</option>
+                        <option value="IntensiveCare">Реанімація</option>
+                        <option value="Ventilated">ШВЛ</option>
+                        <option value="Dead">Смерті</option>
+                    </select>
+                </th>
+                <th>
+                    <input type="submit" value="Відобразити" />
+                </th>
+            </tr>
+        </table>
+    </form>
+</div>
+
+@await Component.InvokeAsync("Chart", new TimeSeriesSettings {AggregationType = Model.AggregationType, ClinicalStatusType = Model.ClinicalStatusType, GroupType = GroupType.Gender})
+@await Component.InvokeAsync("Chart", new TimeSeriesSettings {AggregationType = Model.AggregationType, ClinicalStatusType = Model.ClinicalStatusType, GroupType = GroupType.Age})
+@await Component.InvokeAsync("Chart", new TimeSeriesSettings {AggregationType = Model.AggregationType, ClinicalStatusType = Model.ClinicalStatusType, GroupType = GroupType.Illness})
