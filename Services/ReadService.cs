@@ -44,7 +44,7 @@
 
         private async Task<DataTable> ReadCsvAsync(string url)
         {
-            ////string filePath = Path.GetFullPath("Data.csv");
+            ////string filePath = Path.GetFullPath("data2.csv");
             ////StreamReader streamReader = new StreamReader(filePath);
 
             using var response = await this.httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -63,16 +63,30 @@
 
             while (!streamReader.EndOfStream)
             {
-                var nextLine = await streamReader.ReadLineAsync().ConfigureAwait(false);
-                var rows = this.SplitCsvString(nextLine);
-                var dataRow = dataTable.NewRow();
-
-                for (var i = 0; i < headers.Length; i++)
+                try
                 {
-                    dataRow[i] = rows[i];
-                }
+                    var nextLine = await streamReader.ReadLineAsync().ConfigureAwait(false);
+                    var rows = this.SplitCsvString(nextLine);
+                    var dataRow = dataTable.NewRow();
 
-                dataTable.Rows.Add(dataRow);
+                    for (var i = 0; i < headers.Length; i++)
+                    {
+                        try
+                        {
+                            dataRow[i] = rows[i];
+                        }
+                        catch
+                        {
+                        }
+                    }
+
+                    dataTable.Rows.Add(dataRow);
+                }
+                catch
+                {
+
+                }
+                
             }
 
             return dataTable;

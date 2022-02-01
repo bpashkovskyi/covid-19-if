@@ -27,6 +27,7 @@
                 case GroupType.Gender:
                     this.GroupValues = new List<GroupValue>
                     {
+                        new("Total", dayCases.Count),
                         new("Female", dayCases.Count(@case => @case.Gender == "Жіноча")),
                         new("Male", dayCases.Count(@case => @case.Gender == "Чоловіча"))
                     };

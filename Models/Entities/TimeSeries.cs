@@ -15,6 +15,22 @@
             this.Name = name;
 
             var casesDates = cases.Select(@case => @case.InDate).Distinct().OrderBy(date => date);
+
+            switch (timeSeriesSettings.ClinicalStatusType)
+            {
+                case ClinicalStatusType.Hospitalization: cases = cases.Where(@case => @case.Hospitalized).ToList();
+                    break;
+                case ClinicalStatusType.IntensiveCare:
+                    cases = cases.Where(@case => @case.IntensiveCare).ToList();
+                    break;
+                case ClinicalStatusType.Ventilated:
+                    cases = cases.Where(@case => @case.Ventilated).ToList();
+                    break;
+                case ClinicalStatusType.Dead:
+                    cases = cases.Where(@case => @case.Dead).ToList();
+                    break;
+            }
+
             var daysData = casesDates.Select(caseDate => new DayData(caseDate, cases, timeSeriesSettings)).ToList();
 
             this.DaysData = timeSeriesSettings.AggregationType == AggregationType.Weekly 
