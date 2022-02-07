@@ -1,9 +1,10 @@
-﻿namespace Covid19.Models.Entities
+﻿namespace IfCovid.Models.Entities
 {
-    using Covid19.Models.Enums;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using IfCovid.Models.Enums;
 
     public class DayData
     {

@@ -1,4 +1,4 @@
-﻿namespace Covid19.Utilities
+﻿namespace IfCovid.Utilities
 {
     using System.Collections.Generic;
 

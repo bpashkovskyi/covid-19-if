@@ -1,6 +1,6 @@
-﻿namespace Covid19.Models.Entities
+﻿namespace IfCovid.Models.Entities
 {
-    using Covid19.Models.Enums;
+    using IfCovid.Models.Enums;
 
     public class TimeSeriesSettings
     {

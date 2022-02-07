@@ -1,11 +1,11 @@
-﻿namespace Covid19.Controllers
+﻿namespace IfCovid.Controllers
 {
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Covid19.Models.Entities;
-    using Covid19.Services;
-    using Covid19.ViewModels;
+    using IfCovid.Models.Entities;
+    using IfCovid.Services;
+    using IfCovid.ViewModels;
 
     using Microsoft.AspNetCore.Mvc;
 

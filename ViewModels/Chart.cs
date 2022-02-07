@@ -1,4 +1,4 @@
-﻿namespace Covid19.ViewModels
+﻿namespace IfCovid.ViewModels
 {
     using System.Collections.Generic;
 

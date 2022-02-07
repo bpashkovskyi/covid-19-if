@@ -1,6 +1,6 @@
-﻿namespace Covid19.ViewModels
+﻿namespace IfCovid.ViewModels
 {
-    using Covid19.Models.Enums;
+    using IfCovid.Models.Enums;
 
     public class PageSettings
     {

@@ -4,6 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>08341818-4734-47eb-ad24-e3dea3cffc51</UserSecretsId>
+    <AssemblyName>IfCovid</AssemblyName>
+    <RootNamespace>IfCovid</RootNamespace>
   </PropertyGroup>
 
 </Project>

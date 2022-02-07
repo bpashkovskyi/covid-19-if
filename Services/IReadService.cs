@@ -1,9 +1,9 @@
-﻿namespace Covid19.Services
+﻿namespace IfCovid.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Covid19.Models.Entities;
+    using IfCovid.Models.Entities;
 
     public interface IReadService
     {

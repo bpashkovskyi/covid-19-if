@@ -1,4 +1,4 @@
-﻿namespace Covid19.Models.Entities
+﻿namespace IfCovid.Models.Entities
 {
     using System;
 

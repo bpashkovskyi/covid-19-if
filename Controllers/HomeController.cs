@@ -1,17 +1,12 @@
-﻿namespace Covid19.Controllers
+﻿namespace IfCovid.Controllers
 {
-    using Covid19.ViewModels;
+    using IfCovid.ViewModels;
 
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : Controller
     {
         public IActionResult Index(PageSettings pageSettings)
-        {
-            return this.View(pageSettings);
-        }
-
-        public IActionResult Old(PageSettings pageSettings)
         {
             return this.View(pageSettings);
         }

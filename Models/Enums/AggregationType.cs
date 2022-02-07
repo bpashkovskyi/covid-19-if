@@ -1,4 +1,4 @@
-﻿namespace Covid19.Models.Enums
+﻿namespace IfCovid.Models.Enums
 {
     public enum AggregationType
     {

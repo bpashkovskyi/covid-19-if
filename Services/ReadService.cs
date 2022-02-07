@@ -1,4 +1,4 @@
-﻿namespace Covid19.Services
+﻿namespace IfCovid.Services
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,7 @@
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
-    using Covid19.Models.Entities;
+    using IfCovid.Models.Entities;
 
     using Microsoft.Extensions.Caching.Memory;
 

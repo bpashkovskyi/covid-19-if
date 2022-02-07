@@ -1,10 +1,10 @@
-﻿namespace Covid19.Models.Entities
+﻿namespace IfCovid.Models.Entities
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using Covid19.Models.Enums;
-    using Covid19.Utilities;
+    using IfCovid.Models.Enums;
+    using IfCovid.Utilities;
 
     public class TimeSeries
     {
